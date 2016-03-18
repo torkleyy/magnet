@@ -1,0 +1,32 @@
+use hyper::Client;
+use hyper::Url;
+use hyper::header::Connection;
+
+use package::{Package, PackageQuery};
+
+pub struct Index {
+    url: Url,
+}
+
+pub enum QueryError {
+    InvalidData,
+    NotFound,
+}
+
+impl Index {
+    pub fn lookup(&self, pack: &PackageQuery) -> Result<Package, QueryError> {
+        let mut url = self.url.clone();
+
+        url.set_query_from_pairs(&[
+            ("name", &pack.name.name),
+            ("variant", &pack.name.variant),
+            ("version", &pack.version.serialize())
+        ]);
+
+		let mut client = Client::new();
+
+		let mut res = try!(client.get(url).header(Connection::close()).send().map_err(|_| QueryError::NotFound));
+
+        Package::load(res).map_err(|_| QueryError::InvalidData)
+    }
+}
