@@ -27,6 +27,6 @@ impl Index {
 
 		let mut res = try!(client.get(url).header(Connection::close()).send().map_err(|_| QueryError::NotFound));
 
-        Package::load(res).map_err(|_| QueryError::InvalidData)
+        Package::load(&mut res).map_err(|_| QueryError::InvalidData)
     }
 }
