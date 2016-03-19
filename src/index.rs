@@ -20,7 +20,7 @@ impl Index {
         url.set_query_from_pairs(&[
             ("name", &pack.name.name),
             ("variant", &pack.name.variant),
-            ("version", &pack.version.serialize())
+            //("version", &pack.version.serialize())
         ]);
 
 		let mut client = Client::new();
