@@ -17,7 +17,7 @@ impl Index {
     pub fn lookup(&self, pack: &PackageQuery) -> Result<Package, QueryError> {
         let mut url = self.url.clone();
 
-        url.set_query_from_pairs(&[
+        url.query_pairs_mut().clear().extend_pairs(&[
             ("name", &pack.name.name),
             ("variant", &pack.name.variant),
             //("version", &pack.version.serialize())
