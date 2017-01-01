@@ -135,13 +135,13 @@ impl VersionCondition {
         match introducer[0] {
             0x2 => {
                 let mut num = [0; 8];
-                try!(read.read_exact(&mut num));
+                read.read_exact(&mut num)?;
                 Ok(VersionCondition::GreaterThan(num.iter().fold(0, |x, &y| x << 8 + y as u64)))
             },
-            0x1 => Ok(VersionCondition::Not(box try!(VersionCondition::deserialize(&mut *read)))),
+            0x1 => Ok(VersionCondition::Not(box VersionCondition::deserialize(&mut *read)?)),
             0x0 => Ok(VersionCondition::And(
-                box try!(VersionCondition::deserialize(&mut *read)),
-                box try!(VersionCondition::deserialize(&mut *read)),
+                box VersionCondition::deserialize(&mut *read)?,
+                box VersionCondition::deserialize(&mut *read)?,
             )),
             n => Err(DeserializationError::UnknownType(n)),
         }

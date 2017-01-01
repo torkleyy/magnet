@@ -25,7 +25,7 @@ impl Index {
 
 		let mut client = Client::new();
 
-		let mut res = try!(client.get(url).header(Connection::close()).send().map_err(|_| QueryError::NotFound));
+		let mut res = client.get(url).header(Connection::close()).send().map_err(|_| QueryError::NotFound)?;
 
         Package::load(&mut res).map_err(|_| QueryError::InvalidData)
     }
