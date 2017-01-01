@@ -130,7 +130,7 @@ impl VersionCondition {
     pub fn deserialize<R: Read>(read: &mut R) -> Result<VersionCondition, DeserializationError> {
         let mut introducer = [0];
 
-        try!(read.read_exact(&mut introducer));
+        read.read_exact(&mut introducer)?;
 
         match introducer[0] {
             0x2 => {
